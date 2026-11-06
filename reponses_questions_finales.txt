@@ -1,0 +1,40 @@
+LAB05 - Réponses aux questions finales
+
+1. Pourquoi le Dockerfile n'a-t-il pas besoin de CMD ?
+
+Le Dockerfile n'a pas besoin d'instruction CMD car l'image officielle nginx:1.28-alpine définit déjà une commande de démarrage qui lance automatiquement le serveur Nginx. Lors du démarrage du conteneur, cette commande est utilisée par défaut. 【1-f37580】
+
+2. Quelle différence entre EXPOSE 80 dans le Dockerfile et -p 8080:80 à docker run ?
+
+- EXPOSE 80 indique que l'application à l'intérieur du conteneur écoute sur le port 80. Cette instruction sert principalement de documentation. 【1-f37580】
+- -p 8080:80 publie réellement le port du conteneur vers l'extérieur en associant le port 8080 de l'hôte au port 80 du conteneur. 【1-f37580】
+
+3. Dans localhost:5000/monsite:1.1, que désigne chaque partie du nom ?
+
+- localhost:5000 : adresse du registre Docker privé. 【1-f37580】
+- monsite : nom du dépôt (repository) contenant les images. 【1-f37580】
+- 1.1 : tag correspondant à la version de l'image. 【1-f37580】
+
+4. Pourquoi le registre a-t-il besoin d'un volume ? Que se passerait-il sans ?
+
+Le registre a besoin d'un volume pour conserver les images stockées même après la suppression ou le redémarrage du conteneur registry. Sans volume, toutes les données du registre seraient perdues lorsque le conteneur serait supprimé. 【1-f37580】
+
+5. Comment faites-vous un retour arrière de 1.1 vers 1.0, et pourquoi est-ce si rapide ?
+
+Pour revenir à la version 1.0, il suffit de relancer le conteneur avec l'image taguée 1.0 :
+
+docker run -d -p 8081:80 localhost:5000/monsite:1.0
+
+Cette opération est très rapide car Docker réutilise les couches d'image déjà présentes localement ou disponibles dans le registre. Seules les couches manquantes seraient téléchargées. 【1-f37580】
+
+Conclusion
+
+Les objectifs du TP ont été atteints :
+- Création d'un Dockerfile basé sur nginx Alpine.
+- Ajout des fichiers du site et de la configuration Nginx.
+- Utilisation d'un HEALTHCHECK.
+- Utilisation d'un fichier .dockerignore.
+- Construction des versions 1.0 et 1.1 de l'image.
+- Déploiement via un registre privé.
+- Vérification de la persistance grâce à un volume.
+- Déploiement et retour arrière à partir du registre. 【1-f37580】
